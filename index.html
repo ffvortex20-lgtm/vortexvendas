@@ -2,68 +2,43 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Vortex Admin | Sistema Multi-Vendas</title>
+    <title>Vortex Admin | SuaStore Style</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background: #050505; color: white; font-family: 'Inter', sans-serif; }
-        .input-v { background: #111; border: 1px solid #222; padding: 12px; border-radius: 12px; width: 100%; color: white; outline: none; transition: 0.3s; }
-        .input-v:focus { border-color: #ff0000; box-shadow: 0 0 10px rgba(255,0,0,0.2); }
+        .input-v { background: #111; border: 1px solid #222; padding: 12px; border-radius: 12px; width: 100%; color: white; outline: none; }
+        .input-v:focus { border-color: #ff0000; }
     </style>
 </head>
 <body class="p-4 flex items-center justify-center min-h-screen">
-
     <div id="login" class="max-w-md w-full bg-zinc-900 p-8 rounded-[2rem] border border-zinc-800 text-center">
-        <h1 class="text-2xl font-black mb-6 italic text-red-600 uppercase">Vortex Admin</h1>
+        <h1 class="text-2xl font-black mb-6 italic text-red-600 uppercase tracking-tighter">Vortex Admin</h1>
         <input type="password" id="pass" placeholder="Senha: vortex998" class="input-v text-center mb-4">
-        <button onclick="auth()" class="w-full bg-red-600 py-4 rounded-xl font-bold">ENTRAR NO SISTEMA</button>
+        <button onclick="auth()" class="w-full bg-red-600 py-4 rounded-xl font-bold uppercase">Entrar</button>
     </div>
 
     <div id="painel" class="max-w-3xl w-full bg-zinc-900 p-10 rounded-[2.5rem] border border-zinc-800 hidden">
-        <h2 class="text-xl font-black mb-8 text-red-600 uppercase">Gerador de Checkout Estilo Bot</h2>
-        
+        <h2 class="text-xl font-black mb-8 text-red-600 uppercase">Novo Produto (EG BANK)</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div class="md:col-span-2">
-                <label class="text-[10px] text-zinc-500 uppercase font-bold ml-1">Nome do Produto</label>
-                <input type="text" id="n" placeholder="Ex: Pack VIP + Bypass" class="input-v">
-            </div>
-            <div>
-                <label class="text-[10px] text-zinc-500 uppercase font-bold ml-1">Preço Real (0.00)</label>
-                <input type="number" id="p" step="0.01" placeholder="59.90" class="input-v">
-            </div>
-            <div>
-                <label class="text-[10px] text-zinc-500 uppercase font-bold ml-1">Mídia (Img/YT/Pinterest)</label>
-                <input type="text" id="i" placeholder="Link da imagem ou vídeo" class="input-v">
-            </div>
-            <div>
-                <label class="text-[10px] text-zinc-500 uppercase font-bold ml-1">Sua Chave Pix (AG PAY)</label>
-                <input type="text" id="pix" placeholder="Seu Pix" class="input-v">
-            </div>
-            <div>
-                <label class="text-[10px] text-zinc-500 uppercase font-bold ml-1">E-mail Mercado Pago (Opcional)</label>
-                <input type="text" id="mp" placeholder="E-mail da sua conta MP" class="input-v">
-            </div>
-            <div class="md:col-span-2">
-                <label class="text-[10px] text-zinc-500 uppercase font-bold ml-1">Descrição do Bot</label>
-                <textarea id="d" class="input-v h-20" placeholder="O que o cliente está comprando..."></textarea>
-            </div>
+            <input type="text" id="n" placeholder="Nome do Produto" class="input-v md:col-span-2">
+            <input type="number" id="p" step="0.01" placeholder="Preço (ex: 49.90)" class="input-v">
+            <input type="text" id="i" placeholder="Link da Foto/Vídeo YouTube" class="input-v">
+            <input type="text" id="eg" placeholder="Sua Chave Pix EG BANK" class="input-v md:col-span-2">
+            <textarea id="d" class="input-v h-20 md:col-span-2" placeholder="Descrição do produto..."></textarea>
         </div>
-
-        <button onclick="gerar()" class="w-full bg-red-600 py-5 rounded-2xl font-black mt-8 hover:bg-red-700 transition shadow-xl shadow-red-600/20 uppercase tracking-widest">Gerar Checkout de Venda</button>
-
+        <button onclick="gerar()" class="w-full bg-red-600 py-5 rounded-2xl font-black mt-8 hover:bg-red-700 transition uppercase shadow-xl shadow-red-600/20">Gerar Link SuaStore</button>
         <div id="result" class="mt-8 p-6 bg-black rounded-3xl border border-dashed border-zinc-700 hidden">
             <input type="text" id="url" readonly class="bg-transparent text-center text-xs w-full text-zinc-500 mb-4">
-            <button onclick="copiar()" class="w-full bg-white text-black py-3 rounded-xl font-bold uppercase text-xs">Copiar Link</button>
+            <button onclick="copiar()" class="w-full bg-white text-black py-3 rounded-xl font-bold uppercase text-xs">Copiar Link do Produto</button>
         </div>
     </div>
 
     <script>
-        function auth() { if(document.getElementById('pass').value === "vortex998") { document.getElementById('login').style.display='none'; document.getElementById('painel').style.display='block'; } else { alert("Senha Errada"); } }
-        
+        function auth() { if(document.getElementById('pass').value === "vortex998") { document.getElementById('login').style.display='none'; document.getElementById('painel').style.display='block'; } else { alert("Senha Incorreta"); } }
         async function gerar() {
             const base = window.location.origin + window.location.pathname.replace('index.html', '');
-            const params = `n=${encodeURIComponent(document.getElementById('n').value)}&p=${document.getElementById('p').value}&i=${encodeURIComponent(document.getElementById('i').value)}&pix=${encodeURIComponent(document.getElementById('pix').value)}&mp=${encodeURIComponent(document.getElementById('mp').value)}&d=${encodeURIComponent(document.getElementById('d').value)}`;
+            const params = `n=${encodeURIComponent(document.getElementById('n').value)}&p=${document.getElementById('p').value}&i=${encodeURIComponent(document.getElementById('i').value)}&eg=${encodeURIComponent(document.getElementById('eg').value)}&d=${encodeURIComponent(document.getElementById('d').value)}`;
             const linkLong = `${base}produto/index.html?${params}`;
-            
             try {
                 const res = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(linkLong)}`);
                 document.getElementById('url').value = await res.text();
