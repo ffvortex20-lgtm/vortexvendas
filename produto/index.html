@@ -3,50 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vortex Store | Pagamento</title>
+    <title>Vortex Check</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
-<body class="bg-[#050505] text-white flex items-center justify-center min-h-screen p-4">
+<body class="bg-black text-white min-h-screen flex items-center justify-center p-4">
 
-    <div class="max-w-sm w-full bg-zinc-900 border border-zinc-800 p-10 rounded-[3rem] text-center shadow-2xl">
-        <h2 id="displayNome" class="text-2xl font-black italic mb-2 uppercase text-red-600">CARREGANDO...</h2>
-        <p class="text-zinc-500 text-[10px] mb-8 font-bold tracking-widest uppercase">Pagamento via PIX Seguro</p>
+    <div class="max-w-md w-full bg-zinc-900 border border-zinc-800 rounded-[2.5rem] overflow-hidden shadow-2xl">
+        <img id="viewImg" src="" class="w-full h-48 object-cover bg-zinc-800">
+        
+        <div class="p-8 text-center">
+            <h2 id="viewNome" class="text-2xl font-black italic uppercase text-red-600"></h2>
+            <p id="viewDesc" class="text-zinc-500 text-sm my-4"></p>
+            
+            <div class="bg-black p-6 rounded-3xl mb-6 border border-zinc-800">
+                <span id="viewPreco" class="text-4xl font-black italic"></span>
+            </div>
 
-        <input type="email" id="email" placeholder="Seu Gmail para entrega" class="w-full bg-black border border-zinc-800 p-5 rounded-2xl mb-6 text-center focus:border-red-600 outline-none">
+            <input type="email" id="email" placeholder="Seu Gmail para receber o produto" 
+                   class="w-full bg-black border border-zinc-800 p-4 rounded-xl mb-4 text-center outline-none focus:border-red-600 transition">
 
-        <div class="bg-black/50 p-6 rounded-3xl mb-8 border border-zinc-800">
-            <span id="displayPreco" class="text-4xl font-black italic">R$ 0,00</span>
+            <button onclick="pagar()" class="w-full bg-red-600 py-5 rounded-2xl font-black hover:bg-red-700 transition uppercase tracking-tighter">Pagar via PIX</button>
         </div>
-
-        <button onclick="finalizarCompra()" class="w-full bg-red-600 py-5 rounded-2xl font-black shadow-lg shadow-red-600/20 uppercase tracking-tighter transition-transform active:scale-95">Pagar Agora</button>
     </div>
 
     <script>
-        // Configurações (Preencha com seus dados)
-        const MY_ZAP = "55SEUNUMERO"; // <--- SEU WHATSAPP AQUI
-        emailjs.init("surrco0WdnxPOKqWi");
-
         const params = new URLSearchParams(window.location.search);
-        const nomeProd = params.get('n') || "Produto Vortex";
-        const precoProd = params.get('p') || "0.00";
+        const nome = params.get('n');
+        const preco = params.get('p');
+        const desc = params.get('d');
+        const img = params.get('i');
 
-        document.getElementById('displayNome').innerText = nomeProd;
-        document.getElementById('displayPreco').innerText = "R$ " + precoProd;
+        document.getElementById('viewNome').innerText = nome;
+        document.getElementById('viewPreco').innerText = "R$ " + preco;
+        document.getElementById('viewDesc').innerText = desc;
+        document.getElementById('viewImg').src = img || "https://via.placeholder.com/400x200?text=Vortex+Store";
 
-        function finalizarCompra() {
+        function pagar() {
             const email = document.getElementById('email').value;
-            if(!email.includes('@')) return alert("Insira um e-mail válido!");
-
-            const id = Math.random().toString(36).substr(2, 6).toUpperCase();
+            if(!email.includes('@')) return alert("Digite um Gmail válido!");
             
-            // Envia EmailJS (configure Service ID e Template ID)
-            emailjs.send("service_id", "template_id", { buyer_email: email, product_name: nomeProd, order_id: id, price: precoProd });
-
-            // Envia para o WhatsApp (com o nome do produto)
-            const texto = `🔔 *PEDIDO VORTEX*\n📦 *PRODUTO:* ${nomeProd}\n💰 *VALOR:* R$ ${precoProd}\n🆔 *ID:* #${id}\n📧 *ENTREGA:* ${email}`;
-            window.location.href = `https://wa.me/${MY_ZAP}?text=${encodeURIComponent(texto)}`;
+            const id = Math.random().toString(36).substr(2, 6).toUpperCase();
+            const zapMsg = `🛡️ *PEDIDO VORTEX #${id}*\n📦 *PRODUTO:* ${nome}\n💰 *VALOR:* R$ ${preco}\n📧 *EMAIL:* ${email}\n\nAguardando liberação do produto!`;
+            
+            window.location.href = `https://wa.me/55SEUNUMERO?text=${encodeURIComponent(zapMsg)}`;
         }
     </script>
 </body>
