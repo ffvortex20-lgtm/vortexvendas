@@ -3,67 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout Seguro | Vortex</title>
+    <title>Vortex Bot | Checkout</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#050505] text-white flex items-center justify-center min-h-screen p-4">
+<body class="bg-[#080808] text-white flex items-center justify-center min-h-screen p-4">
 
-    <div class="max-w-md w-full bg-zinc-900 border border-zinc-800 rounded-[3rem] overflow-hidden shadow-2xl">
-        <div id="mediaArea" class="w-full h-52 bg-zinc-800"></div>
+    <div class="max-w-md w-full bg-zinc-900 border border-zinc-800 rounded-[2.5rem] overflow-hidden shadow-2xl animate-fade-in">
+        <div id="midia" class="w-full h-52 bg-zinc-800 relative"></div>
         
-        <div class="p-8 text-center">
-            <h2 id="vNome" class="text-3xl font-black italic text-red-600 mb-6 uppercase"></h2>
+        <div class="p-8">
+            <div class="flex justify-between items-start mb-4">
+                <h1 id="vN" class="text-2xl font-black italic uppercase text-red-600"></h1>
+                <span id="vP" class="bg-red-600/20 text-red-500 px-3 py-1 rounded-lg font-bold text-sm"></span>
+            </div>
             
-            <div class="bg-black p-6 rounded-3xl mb-8 border border-zinc-800">
-                <span class="text-zinc-500 text-xs block mb-1 uppercase font-bold">Valor do Item</span>
-                <span id="vPreco" class="text-4xl font-black italic"></span>
+            <p id="vD" class="text-zinc-500 text-xs mb-8 leading-relaxed"></p>
+
+            <div id="etapa1" class="space-y-3">
+                <p class="text-[10px] font-bold text-zinc-600 uppercase mb-2">Selecione o Método de Pagamento</p>
+                <button onclick="irParaPagamento('pix')" class="w-full bg-zinc-800 hover:bg-zinc-700 p-4 rounded-2xl flex items-center gap-4 transition border border-zinc-700">
+                    <span class="text-2xl">⚡</span> <div class="text-left"><p class="font-bold text-sm">AG PAY (Pix Direto)</p><p class="text-[10px] text-zinc-500">Aprovação em até 5 minutos</p></div>
+                </button>
+                <button onclick="irParaPagamento('mp')" class="w-full bg-zinc-800 hover:bg-zinc-700 p-4 rounded-2xl flex items-center gap-4 transition border border-zinc-700">
+                    <span class="text-2xl">💳</span> <div class="text-left"><p class="font-bold text-sm">Mercado Pago</p><p class="text-[10px] text-zinc-500">Cartão ou Saldo MP</p></div>
+                </button>
             </div>
 
-            <button onclick="gerarPix()" id="btnPagar" class="w-full bg-red-600 py-5 rounded-2xl font-black hover:bg-red-700 transition uppercase shadow-xl shadow-red-600/20">Gerar Chave PIX</button>
-
-            <div id="pixArea" class="hidden mt-6 animate-pulse">
-                <p class="text-[10px] text-green-500 font-bold mb-2 uppercase">Chave Copiada! Pague agora:</p>
-                <div class="bg-black p-4 rounded-xl border border-zinc-700 mb-4">
-                    <input type="text" id="pixKey" readonly class="bg-transparent text-[10px] w-full text-zinc-400 text-center outline-none">
+            <div id="etapaPagamento" class="hidden text-center animate-pulse">
+                <div class="bg-black p-6 rounded-3xl border border-zinc-800 mb-6">
+                    <p class="text-xs text-zinc-500 mb-2 uppercase font-bold">Copie a Chave e Pague o Valor Exato</p>
+                    <input type="text" id="chaveFinal" readonly class="bg-transparent text-center text-red-500 font-mono text-sm w-full outline-none mb-4">
+                    <button onclick="copiarChave()" class="text-[10px] bg-white text-black px-4 py-2 rounded-lg font-black uppercase">Copiar Chave</button>
                 </div>
-                <button onclick="confirmar()" class="w-full bg-green-600 py-4 rounded-xl font-black text-sm uppercase">Já realizei o pagamento</button>
+                <button onclick="verificar()" class="w-full bg-green-600 py-5 rounded-2xl font-black uppercase shadow-lg shadow-green-600/20">Já paguei, verificar agora</button>
             </div>
         </div>
     </div>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const nome = params.get('n');
-        const preco = params.get('p');
-        const pix = params.get('pix');
-        const midia = params.get('i');
-        const entrega = params.get('ent');
-
-        document.getElementById('vNome').innerText = nome;
-        document.getElementById('vPreco').innerText = "R$ " + preco;
-
-        // Mostrar Mídia
-        const mediaArea = document.getElementById('mediaArea');
-        if(midia.includes('youtu')) {
-            let vid = midia.split('v=')[1] || midia.split('/').pop();
-            mediaArea.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${vid}"></iframe>`;
+        const u = new URLSearchParams(window.location.search);
+        const midiaUrl = u.get('i');
+        
+        // Render Mídia
+        const m = document.getElementById('midia');
+        if(midiaUrl.includes('youtu')) {
+            let id = midiaUrl.split('v=')[1] || midiaUrl.split('/').pop();
+            m.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}"></iframe>`;
         } else {
-            mediaArea.innerHTML = `<img src="${midia}" class="w-full h-full object-cover">`;
+            m.innerHTML = `<img src="${midiaUrl}" class="w-full h-full object-cover">`;
         }
 
-        function gerarPix() {
-            // Exibe a área do Pix
-            document.getElementById('pixKey').value = pix;
-            document.getElementById('btnPagar').classList.add('hidden');
-            document.getElementById('pixArea').classList.remove('hidden');
+        document.getElementById('vN').innerText = u.get('n');
+        document.getElementById('vP').innerText = "R$ " + u.get('p');
+        document.getElementById('vD').innerText = u.get('d');
+
+        function irParaPagamento(tipo) {
+            document.getElementById('etapa1').classList.add('hidden');
+            document.getElementById('etapaPagamento').classList.remove('hidden');
+            document.getElementById('chaveFinal').value = tipo === 'pix' ? u.get('pix') : u.get('mp');
+        }
+
+        function copiarChave() {
+            navigator.clipboard.writeText(document.getElementById('chaveFinal').value);
+            alert("Chave Copiada!");
+        }
+
+        function verificar() {
+            const idCompravante = Math.random().toString(36).substr(2, 8).toUpperCase();
+            const msg = `⚠️ *VERIFICAÇÃO DE PAGAMENTO*\n\n` +
+                        `👤 *CLIENTE AGUARDANDO*\n` +
+                        `📦 *PRODUTO:* ${u.get('n')}\n` +
+                        `💰 *VALOR:* R$ ${u.get('p')}\n` +
+                        `🆔 *ID DO PEDIDO:* #${idCompravante}\n\n` +
+                        `_Estou enviando o comprovante abaixo para liberação imediata._`;
             
-            // Copia a chave automaticamente
-            navigator.clipboard.writeText(pix);
-        }
-
-        function confirmar() {
-            const msg = `🛡️ *PAGAMENTO REALIZADO*\n📦 *ITEM:* ${nome}\n💰 *VALOR:* R$ ${preco}\n\n_Favor liberar meu produto._`;
-            // Redireciona para o suporte/WhatsApp para você conferir o pagamento e ele receber o link
+            // Abre o WhatsApp para o cliente enviar o print (Sistema de Verificação Humana)
             window.location.href = `https://wa.me/55SEUNUMERO?text=${encodeURIComponent(msg)}`;
         }
     </script>
