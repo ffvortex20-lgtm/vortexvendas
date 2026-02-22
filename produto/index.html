@@ -3,82 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vortex Bot | Checkout</title>
+    <title>Checkout Seguro | Vortex</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #080808; color: white; font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(10px); border: 1px solid #333; }
+    </style>
 </head>
-<body class="bg-[#080808] text-white flex items-center justify-center min-h-screen p-4">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <div class="max-w-md w-full bg-zinc-900 border border-zinc-800 rounded-[2.5rem] overflow-hidden shadow-2xl animate-fade-in">
-        <div id="midia" class="w-full h-52 bg-zinc-800 relative"></div>
+    <div class="max-w-md w-full glass rounded-[3rem] overflow-hidden shadow-2xl">
+        <div id="media" class="w-full h-48 bg-zinc-800"></div>
         
         <div class="p-8">
-            <div class="flex justify-between items-start mb-4">
-                <h1 id="vN" class="text-2xl font-black italic uppercase text-red-600"></h1>
-                <span id="vP" class="bg-red-600/20 text-red-500 px-3 py-1 rounded-lg font-bold text-sm"></span>
-            </div>
-            
-            <p id="vD" class="text-zinc-500 text-xs mb-8 leading-relaxed"></p>
+            <h1 id="vN" class="text-2xl font-black italic text-red-600 mb-2"></h1>
+            <p id="vD" class="text-zinc-500 text-xs mb-6"></p>
 
-            <div id="etapa1" class="space-y-3">
-                <p class="text-[10px] font-bold text-zinc-600 uppercase mb-2">Selecione o Método de Pagamento</p>
-                <button onclick="irParaPagamento('pix')" class="w-full bg-zinc-800 hover:bg-zinc-700 p-4 rounded-2xl flex items-center gap-4 transition border border-zinc-700">
-                    <span class="text-2xl">⚡</span> <div class="text-left"><p class="font-bold text-sm">AG PAY (Pix Direto)</p><p class="text-[10px] text-zinc-500">Aprovação em até 5 minutos</p></div>
-                </button>
-                <button onclick="irParaPagamento('mp')" class="w-full bg-zinc-800 hover:bg-zinc-700 p-4 rounded-2xl flex items-center gap-4 transition border border-zinc-700">
-                    <span class="text-2xl">💳</span> <div class="text-left"><p class="font-bold text-sm">Mercado Pago</p><p class="text-[10px] text-zinc-500">Cartão ou Saldo MP</p></div>
-                </button>
+            <div class="bg-black/40 p-5 rounded-2xl mb-8 border border-zinc-800 flex justify-between items-center">
+                <span class="text-zinc-400 text-xs font-bold uppercase">Total</span>
+                <span id="vP" class="text-3xl font-black italic"></span>
             </div>
 
-            <div id="etapaPagamento" class="hidden text-center animate-pulse">
-                <div class="bg-black p-6 rounded-3xl border border-zinc-800 mb-6">
-                    <p class="text-xs text-zinc-500 mb-2 uppercase font-bold">Copie a Chave e Pague o Valor Exato</p>
-                    <input type="text" id="chaveFinal" readonly class="bg-transparent text-center text-red-500 font-mono text-sm w-full outline-none mb-4">
-                    <button onclick="copiarChave()" class="text-[10px] bg-white text-black px-4 py-2 rounded-lg font-black uppercase">Copiar Chave</button>
-                </div>
-                <button onclick="verificar()" class="w-full bg-green-600 py-5 rounded-2xl font-black uppercase shadow-lg shadow-green-600/20">Já paguei, verificar agora</button>
+            <div id="checkout" class="space-y-4">
+                <input type="email" id="email" placeholder="Seu e-mail principal" class="w-full bg-black border border-zinc-800 p-4 rounded-xl outline-none focus:border-red-600">
+                <button onclick="pagarEgBank()" class="w-full bg-red-600 py-5 rounded-2xl font-black uppercase shadow-lg shadow-red-600/30 transition hover:scale-105">Pagar via PIX (EG BANK)</button>
+            </div>
+
+            <div id="pixContainer" class="hidden text-center mt-6 animate-pulse">
+                <p class="text-green-500 font-bold text-xs mb-4 uppercase">Chave EG BANK Gerada!</p>
+                <input type="text" id="chaveEg" readonly class="w-full bg-black p-3 rounded-lg text-xs text-zinc-500 text-center mb-4">
+                <button onclick="verificar()" class="w-full bg-zinc-100 text-black py-4 rounded-xl font-black text-sm uppercase">Verificar Pagamento</button>
             </div>
         </div>
     </div>
 
     <script>
         const u = new URLSearchParams(window.location.search);
-        const midiaUrl = u.get('i');
         
-        // Render Mídia
-        const m = document.getElementById('midia');
-        if(midiaUrl.includes('youtu')) {
-            let id = midiaUrl.split('v=')[1] || midiaUrl.split('/').pop();
-            m.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}"></iframe>`;
-        } else {
-            m.innerHTML = `<img src="${midiaUrl}" class="w-full h-full object-cover">`;
-        }
-
+        // Setup Inicial
         document.getElementById('vN').innerText = u.get('n');
         document.getElementById('vP').innerText = "R$ " + u.get('p');
         document.getElementById('vD').innerText = u.get('d');
+        const m = document.getElementById('media');
+        const img = u.get('i');
 
-        function irParaPagamento(tipo) {
-            document.getElementById('etapa1').classList.add('hidden');
-            document.getElementById('etapaPagamento').classList.remove('hidden');
-            document.getElementById('chaveFinal').value = tipo === 'pix' ? u.get('pix') : u.get('mp');
+        if(img.includes('youtu')) {
+            let id = img.split('v=')[1] || img.split('/').pop();
+            m.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1"></iframe>`;
+        } else {
+            m.innerHTML = `<img src="${img}" class="w-full h-full object-cover">`;
         }
 
-        function copiarChave() {
-            navigator.clipboard.writeText(document.getElementById('chaveFinal').value);
-            alert("Chave Copiada!");
+        function pagarEgBank() {
+            const email = document.getElementById('email').value;
+            if(!email.includes('@')) return alert("E-mail inválido");
+            
+            // Simulação de chamada EG BANK (Redirecionando para a chave Pix configurada no Admin)
+            document.getElementById('checkout').classList.add('hidden');
+            document.getElementById('pixContainer').classList.remove('hidden');
+            document.getElementById('chaveEg').value = u.get('eg');
+            navigator.clipboard.writeText(u.get('eg'));
+            alert("Pix Copiado com Sucesso via EG BANK!");
         }
 
         function verificar() {
-            const idCompravante = Math.random().toString(36).substr(2, 8).toUpperCase();
-            const msg = `⚠️ *VERIFICAÇÃO DE PAGAMENTO*\n\n` +
-                        `👤 *CLIENTE AGUARDANDO*\n` +
-                        `📦 *PRODUTO:* ${u.get('n')}\n` +
-                        `💰 *VALOR:* R$ ${u.get('p')}\n` +
-                        `🆔 *ID DO PEDIDO:* #${idCompravante}\n\n` +
-                        `_Estou enviando o comprovante abaixo para liberação imediata._`;
-            
-            // Abre o WhatsApp para o cliente enviar o print (Sistema de Verificação Humana)
-            window.location.href = `https://wa.me/55SEUNUMERO?text=${encodeURIComponent(msg)}`;
+            const id = Math.random().toString(36).substr(2, 6).toUpperCase();
+            window.location.href = `https://wa.me/55SEUNUMERO?text=PAGAMENTO+EG+BANK+REALIZADO%0AItem: ${u.get('n')}%0AID: ${id}`;
         }
     </script>
 </body>
