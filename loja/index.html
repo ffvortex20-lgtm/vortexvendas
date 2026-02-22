@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VORTEX STORE | OFICIAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #050505; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .animate-pulse-light { animation: pulse-light 2s infinite; }
+        @keyframes pulse-light { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .card-bg { background: linear-gradient(145deg, #1a0505, #0a0a0a); border: 1px solid #2a0a0a; transition: all 0.4s ease; }
+        .card-bg:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 20px 40px rgba(255,0,0,0.2); border-color: #ff0000; }
+    </style>
+</head>
+<body class="text-white">
+    <nav class="p-6 border-b border-zinc-900 flex justify-between items-center bg-black/60 backdrop-blur-xl sticky top-0 z-[100]">
+        <h1 class="text-2xl font-black italic animate-pulse-light">VORTEX<span class="text-red-600 font-normal">STORE</span></h1>
+        <div class="flex gap-6 text-sm font-bold uppercase tracking-wide">
+            <a href="../" class="hover:text-red-600 transition">Admin</a> <a href="termos/" class="hover:text-red-600 transition">Termos</a>
+            <a href="suporte/" class="hover:text-red-600 transition">Suporte</a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-8 mt-16 text-center">
+        <h2 class="text-5xl font-black mb-4 italic animate-fade-in">CATÁLOGO EXCLUSIVO</h2>
+        <p class="text-zinc-400 text-lg mb-16 animate-slide-up">Descubra os melhores produtos digitais com entrega automática.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div class="card-bg p-10 rounded-[3rem] flex flex-col items-center shadow-lg animate-fade-in-up">
+                <div class="w-20 h-20 bg-red-600/20 rounded-full flex items-center justify-center text-5xl mb-6 transform hover:scale-110 transition">💎</div>
+                <h3 class="text-3xl font-black mb-3 italic">VORTEX VIP</h3>
+                <p class="text-zinc-500 text-base mb-8 flex-grow">Acesso mensal ao software premium com todas as funcionalidades e suporte prioritário.</p>
+                <div class="w-full border-t border-zinc-800 pt-6">
+                    <span class="text-4xl font-black text-white block mb-6 italic">R$ 59,90</span>
+                    <a href="../produto/?n=Vortex VIP Mensal&p=59.90" class="w-full bg-red-600 text-white py-5 rounded-2xl font-black hover:bg-red-700 transition-all uppercase tracking-tighter transform hover:scale-105 shadow-xl shadow-red-600/30">
+                        COMPRAR AGORA
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-bg p-10 rounded-[3rem] flex flex-col items-center shadow-lg animate-fade-in-up">
+                <div class="w-20 h-20 bg-blue-600/20 rounded-full flex items-center justify-center text-5xl mb-6 transform hover:scale-110 transition">⚡</div>
+                <h3 class="text-3xl font-black mb-3 italic">PACK SCRIPTS V2</h3>
+                <p class="text-zinc-500 text-base mb-8 flex-grow">Coleção de scripts otimizados para performance máxima, testados e aprovados.</p>
+                <div class="w-full border-t border-zinc-800 pt-6">
+                    <span class="text-4xl font-black text-white block mb-6 italic">R$ 39,90</span>
+                    <a href="../produto/?n=Pack Scripts V2&p=39.90" class="w-full bg-red-600 text-white py-5 rounded-2xl font-black hover:bg-red-700 transition-all uppercase tracking-tighter transform hover:scale-105 shadow-xl shadow-red-600/30">
+                        COMPRAR AGORA
+                    </a>
+                </div>
+            </div>
+            
+            </div>
+    </main>
+</body>
+</html>
