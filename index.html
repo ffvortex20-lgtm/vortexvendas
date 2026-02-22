@@ -3,85 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar Loja</title>
+    <title>Gestão Total</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #050505; font-family: 'Inter', sans-serif; }
-        .neon-border { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.3); }
-        input:focus { border-color: #ff0000; box-shadow: 0 0 8px rgba(255,0,0,0.5); }
+        body { background: #050505; color: white; font-family: 'Inter', sans-serif; }
+        .input-vortex { background: #000; border: 1px solid #222; padding: 12px; border-radius: 12px; outline: none; width: 100%; transition: 0.3s; }
+        .input-vortex:focus { border-color: #ff0000; box-shadow: 0 0 10px rgba(255,0,0,0.2); }
     </style>
 </head>
-<body class="text-zinc-200 p-8 flex items-center justify-center min-h-screen">
+<body class="p-4 flex items-center justify-center min-h-screen">
 
-    <div id="loginPanel" class="max-w-md w-full bg-zinc-900 p-10 rounded-3xl border border-zinc-800 text-center">
-        <h1 class="text-3xl font-black italic text-red-600 mb-6">ADMIN VORTEX</h1>
-        <input type="password" id="adminPass" placeholder="Senha do Administrador" 
-               class="w-full bg-black p-4 rounded-xl outline-none border border-zinc-800 focus:neon-border mb-4 text-center text-white">
-        <button onclick="loginAdmin()" class="w-full bg-red-600 hover:bg-red-700 py-4 rounded-xl font-bold uppercase transition-all">ACESSAR PAINEL</button>
+    <div id="login" class="max-w-md w-full bg-zinc-900 p-8 rounded-[2rem] border border-zinc-800 text-center">
+        <h1 class="text-2xl font-black mb-6 italic text-red-600">VORTEX ADMIN</h1>
+        <input type="password" id="pass" placeholder="Senha" class="input-vortex text-center mb-4">
+        <button onclick="logar()" class="w-full bg-red-600 py-4 rounded-xl font-bold">ENTRAR</button>
     </div>
 
-    <div id="adminPanel" class="max-w-2xl w-full bg-zinc-900 p-10 rounded-3xl border border-zinc-800 hidden">
-        <h1 class="text-3xl font-black italic text-red-600 mb-8">GERENCIAR PRODUTOS</h1>
-        
-        <div class="space-y-6">
-            <div>
-                <label class="block text-xs font-bold mb-1 text-zinc-400">NOME DO PRODUTO (EX: "Vortex VIP Mensal")</label>
-                <input type="text" id="admNome" class="w-full bg-black p-4 rounded-xl outline-none border border-zinc-800 focus:neon-border text-white">
-            </div>
-            <div>
-                <label class="block text-xs font-bold mb-1 text-zinc-400">PREÇO (EX: "59.90")</label>
-                <input type="text" id="admPreco" class="w-full bg-black p-4 rounded-xl outline-none border border-zinc-800 focus:neon-border text-white">
-            </div>
-            <button onclick="gerarLink()" class="w-full bg-green-600 hover:bg-green-700 py-4 rounded-xl font-bold uppercase mt-6 transition-all">GERAR LINK CURTO DO PRODUTO</button>
+    <div id="painel" class="max-w-2xl w-full bg-zinc-900 p-8 rounded-[2rem] border border-zinc-800 hidden">
+        <div class="flex justify-between mb-8">
+            <h1 class="text-xl font-black italic text-red-600">GERENCIAR PRODUTO</h1>
+            <button onclick="location.reload()" class="text-xs text-zinc-500">Sair</button>
         </div>
 
-        <div id="resultado" class="mt-8 pt-6 border-t border-zinc-800 hidden">
-            <label class="block text-xs font-bold mb-2 text-green-500">LINK PARA DIVULGAR (TINYURL):</label>
-            <div class="flex gap-2">
-                <input type="text" id="linkFinal" readonly class="w-full bg-black p-3 rounded-xl border border-green-700 text-green-400 font-mono text-sm">
-                <button onclick="copyBtn()" class="bg-zinc-800 hover:bg-zinc-700 px-4 rounded-xl text-white transition">📋</button>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="text-[10px] font-bold text-zinc-500 uppercase">Título do Produto</label>
+                <input type="text" id="pNome" placeholder="Ex: Vortex VIP" class="input-vortex">
             </div>
-            <p class="text-zinc-500 text-xs mt-4">Cole este link na sua loja ou divulgue diretamente.</p>
+            <div>
+                <label class="text-[10px] font-bold text-zinc-500 uppercase">Preço (Só números)</label>
+                <input type="text" id="pPreco" placeholder="59.90" class="input-vortex">
+            </div>
+            <div class="md:col-span-2">
+                <label class="text-[10px] font-bold text-zinc-500 uppercase">Descrição Curta</label>
+                <input type="text" id="pDesc" placeholder="Software indetectável..." class="input-vortex">
+            </div>
+            <div class="md:col-span-2">
+                <label class="text-[10px] font-bold text-zinc-500 uppercase">URL da Imagem/Foto</label>
+                <input type="text" id="pImg" placeholder="https://site.com/foto.jpg" class="input-vortex">
+            </div>
+            <div class="md:col-span-2">
+                <label class="text-[10px] font-bold text-zinc-500 uppercase">Link de Entrega (O que o cliente recebe)</label>
+                <input type="text" id="pLink" placeholder="https://download.com/arquivo" class="input-vortex">
+            </div>
+        </div>
+
+        <button onclick="gerarTudo()" class="w-full bg-red-600 py-5 rounded-2xl font-black mt-8 hover:bg-red-700 transition uppercase tracking-tighter">Gerar Link Profissional</button>
+
+        <div id="resultado" class="mt-8 p-4 bg-black rounded-2xl border border-dashed border-zinc-700 hidden">
+            <p class="text-[10px] text-green-500 font-bold mb-2">LINK ENCURTADO PRONTO:</p>
+            <div class="flex gap-2">
+                <input type="text" id="finalLink" readonly class="bg-transparent text-sm w-full outline-none text-zinc-400 font-mono">
+                <button onclick="copiar()" class="text-white text-sm">COPIAR</button>
+            </div>
         </div>
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "suasenhaadmin"; // <--- COLOQUE SUA SENHA AQUI
-        
-        function loginAdmin() {
-            const pass = document.getElementById('adminPass').value;
-            if(pass === ADMIN_PASSWORD) {
-                document.getElementById('loginPanel').classList.add('hidden');
-                document.getElementById('adminPanel').classList.remove('hidden');
-            } else {
-                alert("Senha incorreta!");
-            }
+        const SENHA_VAL = "vortex998";
+
+        function logar() {
+            if(document.getElementById('pass').value === SENHA_VAL) {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('painel').style.display = 'block';
+            } else { alert("Senha Errada!"); }
         }
 
-        async function gerarLink() {
-            const nome = document.getElementById('admNome').value;
-            const preco = document.getElementById('admPreco').value;
-            const baseUrl = window.location.origin; // Ex: https://seuuser.github.io
-            
-            // Link que aponta para a página de produto inteligente
-            const urlLonga = `${baseUrl}/produto/?n=${encodeURIComponent(nome)}&p=${preco}`;
-            
+        async function gerarTudo() {
+            const n = document.getElementById('pNome').value;
+            const p = document.getElementById('pPreco').value;
+            const d = document.getElementById('pDesc').value;
+            const i = document.getElementById('pImg').value;
+            const l = document.getElementById('pLink').value;
+
+            const base = window.location.origin + window.location.pathname.replace('index.html', '');
+            // Construção da URL com todos os parâmetros para a página de produto não dar 404
+            const urlLonga = `${base}produto/index.html?n=${encodeURIComponent(n)}&p=${p}&d=${encodeURIComponent(d)}&i=${encodeURIComponent(i)}&l=${encodeURIComponent(l)}`;
+
             try {
-                const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(urlLonga)}`);
-                const linkCurto = await response.text();
-                
-                document.getElementById('linkFinal').value = linkCurto;
-                document.getElementById('resultado').classList.remove('hidden');
-            } catch (error) {
-                alert("Erro ao encurtar. Verifique sua conexão ou use o link longo: " + urlLonga);
+                const res = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(urlLonga)}`);
+                const curto = await res.text();
+                document.getElementById('finalLink').value = curto;
+                document.getElementById('resultado').style.display = 'block';
+            } catch {
+                document.getElementById('finalLink').value = urlLonga;
+                document.getElementById('resultado').style.display = 'block';
             }
         }
 
-        function copyBtn() {
-            const input = document.getElementById('linkFinal');
+        function copiar() {
+            const input = document.getElementById('finalLink');
             input.select();
             navigator.clipboard.writeText(input.value);
-            alert("Link do produto copiado!");
+            alert("Copiado!");
         }
     </script>
 </body>
