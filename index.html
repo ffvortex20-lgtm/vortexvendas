@@ -6,96 +6,100 @@
     <title>Gestão Total</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #050505; color: white; font-family: 'Inter', sans-serif; }
-        .input-vortex { background: #000; border: 1px solid #222; padding: 12px; border-radius: 12px; outline: none; width: 100%; transition: 0.3s; }
-        .input-vortex:focus { border-color: #ff0000; box-shadow: 0 0 10px rgba(255,0,0,0.2); }
+        body { background: #050505; color: white; font-family: sans-serif; }
+        .input-v { background: #000; border: 1px solid #222; padding: 12px; border-radius: 12px; outline: none; width: 100%; color: white; }
+        .input-v:focus { border-color: #ff0000; box-shadow: 0 0 10px rgba(255,0,0,0.2); }
     </style>
 </head>
 <body class="p-4 flex items-center justify-center min-h-screen">
 
-    <div id="login" class="max-w-md w-full bg-zinc-900 p-8 rounded-[2rem] border border-zinc-800 text-center">
-        <h1 class="text-2xl font-black mb-6 italic text-red-600">VORTEX ADMIN</h1>
-        <input type="password" id="pass" placeholder="Senha" class="input-vortex text-center mb-4">
-        <button onclick="logar()" class="w-full bg-red-600 py-4 rounded-xl font-bold">ENTRAR</button>
+    <div id="loginSection" class="max-w-md w-full bg-zinc-900 p-8 rounded-[2rem] border border-zinc-800 text-center">
+        <h1 class="text-2xl font-black mb-6 italic text-red-600">VORTEX LOGIN</h1>
+        <input type="text" id="passInput" placeholder="Digite a senha aqui" class="input-v text-center mb-4">
+        <button onclick="checkPass()" class="w-full bg-red-600 py-4 rounded-xl font-bold uppercase tracking-widest">Entrar no Sistema</button>
     </div>
 
-    <div id="painel" class="max-w-2xl w-full bg-zinc-900 p-8 rounded-[2rem] border border-zinc-800 hidden">
-        <div class="flex justify-between mb-8">
-            <h1 class="text-xl font-black italic text-red-600">GERENCIAR PRODUTO</h1>
-            <button onclick="location.reload()" class="text-xs text-zinc-500">Sair</button>
+    <div id="adminSection" class="max-w-2xl w-full bg-zinc-900 p-8 rounded-[2.5rem] border border-zinc-800 hidden shadow-2xl">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-xl font-black italic text-red-600 uppercase">Gerenciar Produto</h1>
+            <span class="text-[10px] bg-red-600/20 text-red-500 px-3 py-1 rounded-full font-bold">LOGADO</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="md:col-span-2">
+                <label class="text-[10px] font-bold text-zinc-500 uppercase ml-2">Título do Item</label>
+                <input type="text" id="n" placeholder="Ex: Vortex VIP 30 Dias" class="input-v">
+            </div>
             <div>
-                <label class="text-[10px] font-bold text-zinc-500 uppercase">Título do Produto</label>
-                <input type="text" id="pNome" placeholder="Ex: Vortex VIP" class="input-vortex">
+                <label class="text-[10px] font-bold text-zinc-500 uppercase ml-2">Preço (R$)</label>
+                <input type="text" id="p" placeholder="59.90" class="input-v">
             </div>
             <div>
-                <label class="text-[10px] font-bold text-zinc-500 uppercase">Preço (Só números)</label>
-                <input type="text" id="pPreco" placeholder="59.90" class="input-vortex">
+                <label class="text-[10px] font-bold text-zinc-500 uppercase ml-2">Link da Foto (URL)</label>
+                <input type="text" id="i" placeholder="https://imgur.com/foto.jpg" class="input-v">
             </div>
             <div class="md:col-span-2">
-                <label class="text-[10px] font-bold text-zinc-500 uppercase">Descrição Curta</label>
-                <input type="text" id="pDesc" placeholder="Software indetectável..." class="input-vortex">
+                <label class="text-[10px] font-bold text-zinc-500 uppercase ml-2">Descrição Curta</label>
+                <input type="text" id="d" placeholder="Bypass indetectável, suporte 24h..." class="input-v">
             </div>
             <div class="md:col-span-2">
-                <label class="text-[10px] font-bold text-zinc-500 uppercase">URL da Imagem/Foto</label>
-                <input type="text" id="pImg" placeholder="https://site.com/foto.jpg" class="input-vortex">
-            </div>
-            <div class="md:col-span-2">
-                <label class="text-[10px] font-bold text-zinc-500 uppercase">Link de Entrega (O que o cliente recebe)</label>
-                <input type="text" id="pLink" placeholder="https://download.com/arquivo" class="input-vortex">
+                <label class="text-[10px] font-bold text-zinc-500 uppercase ml-2">Link de Entrega (O que o cliente recebe)</label>
+                <input type="text" id="l" placeholder="https://link-do-produto-aqui.com" class="input-v">
             </div>
         </div>
 
-        <button onclick="gerarTudo()" class="w-full bg-red-600 py-5 rounded-2xl font-black mt-8 hover:bg-red-700 transition uppercase tracking-tighter">Gerar Link Profissional</button>
+        <button onclick="createTiny()" class="w-full bg-red-600 py-5 rounded-2xl font-black mt-8 hover:bg-red-700 transition uppercase shadow-xl shadow-red-600/20">Gerar Link Curto Profissional</button>
 
-        <div id="resultado" class="mt-8 p-4 bg-black rounded-2xl border border-dashed border-zinc-700 hidden">
-            <p class="text-[10px] text-green-500 font-bold mb-2">LINK ENCURTADO PRONTO:</p>
-            <div class="flex gap-2">
-                <input type="text" id="finalLink" readonly class="bg-transparent text-sm w-full outline-none text-zinc-400 font-mono">
-                <button onclick="copiar()" class="text-white text-sm">COPIAR</button>
+        <div id="resultBox" class="mt-8 p-6 bg-black rounded-3xl border border-dashed border-zinc-700 hidden">
+            <p class="text-[10px] text-green-500 font-bold mb-2 uppercase tracking-widest text-center">Link Encurtado via TinyURL</p>
+            <div class="flex flex-col gap-3">
+                <input type="text" id="shortUrl" readonly class="bg-transparent text-center text-sm w-full outline-none text-zinc-400 font-mono">
+                <button onclick="copyLink()" class="bg-white text-black py-2 rounded-xl text-xs font-bold uppercase">Copiar Link</button>
             </div>
         </div>
     </div>
 
     <script>
-        const SENHA_VAL = "vortex998";
-
-        function logar() {
-            if(document.getElementById('pass').value === SENHA_VAL) {
-                document.getElementById('login').style.display = 'none';
-                document.getElementById('painel').style.display = 'block';
-            } else { alert("Senha Errada!"); }
-        }
-
-        async function gerarTudo() {
-            const n = document.getElementById('pNome').value;
-            const p = document.getElementById('pPreco').value;
-            const d = document.getElementById('pDesc').value;
-            const i = document.getElementById('pImg').value;
-            const l = document.getElementById('pLink').value;
-
-            const base = window.location.origin + window.location.pathname.replace('index.html', '');
-            // Construção da URL com todos os parâmetros para a página de produto não dar 404
-            const urlLonga = `${base}produto/index.html?n=${encodeURIComponent(n)}&p=${p}&d=${encodeURIComponent(d)}&i=${encodeURIComponent(i)}&l=${encodeURIComponent(l)}`;
-
-            try {
-                const res = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(urlLonga)}`);
-                const curto = await res.text();
-                document.getElementById('finalLink').value = curto;
-                document.getElementById('resultado').style.display = 'block';
-            } catch {
-                document.getElementById('finalLink').value = urlLonga;
-                document.getElementById('resultado').style.display = 'block';
+        function checkPass() {
+            const entrada = document.getElementById('passInput').value.trim();
+            if (entrada === "vortex998") {
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('adminSection').classList.remove('hidden');
+            } else {
+                alert("Senha Incorreta! Tente novamente.");
             }
         }
 
-        function copiar() {
-            const input = document.getElementById('finalLink');
-            input.select();
-            navigator.clipboard.writeText(input.value);
-            alert("Copiado!");
+        async function createTiny() {
+            const n = document.getElementById('n').value;
+            const p = document.getElementById('p').value;
+            const d = document.getElementById('d').value;
+            const i = document.getElementById('i').value;
+            const l = document.getElementById('l').value;
+
+            // Pega o link base do seu GitHub sem o index.html
+            const base = window.location.origin + window.location.pathname.replace('index.html', '');
+            
+            // Monta o link que a TinyURL vai encurtar (Apontando para a pasta produto)
+            const fullUrl = `${base}produto/index.html?n=${encodeURIComponent(n)}&p=${p}&d=${encodeURIComponent(d)}&i=${encodeURIComponent(i)}&l=${encodeURIComponent(l)}`;
+
+            try {
+                // Chama a API pública da TinyURL
+                const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(fullUrl)}`);
+                const short = await response.text();
+                
+                document.getElementById('shortUrl').value = short;
+                document.getElementById('resultBox').classList.remove('hidden');
+            } catch (err) {
+                alert("Erro na API da TinyURL. Copie o link longo: " + fullUrl);
+            }
+        }
+
+        function copyLink() {
+            const field = document.getElementById('shortUrl');
+            field.select();
+            navigator.clipboard.writeText(field.value);
+            alert("Copiado com sucesso!");
         }
     </script>
 </body>
