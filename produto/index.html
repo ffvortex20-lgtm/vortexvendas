@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vortex Store | Pagamento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body class="bg-[#050505] text-white flex items-center justify-center min-h-screen p-4">
+
+    <div class="max-w-sm w-full bg-zinc-900 border border-zinc-800 p-10 rounded-[3rem] text-center shadow-2xl">
+        <h2 id="displayNome" class="text-2xl font-black italic mb-2 uppercase text-red-600">CARREGANDO...</h2>
+        <p class="text-zinc-500 text-[10px] mb-8 font-bold tracking-widest uppercase">Pagamento via PIX Seguro</p>
+
+        <input type="email" id="email" placeholder="Seu Gmail para entrega" class="w-full bg-black border border-zinc-800 p-5 rounded-2xl mb-6 text-center focus:border-red-600 outline-none">
+
+        <div class="bg-black/50 p-6 rounded-3xl mb-8 border border-zinc-800">
+            <span id="displayPreco" class="text-4xl font-black italic">R$ 0,00</span>
+        </div>
+
+        <button onclick="finalizarCompra()" class="w-full bg-red-600 py-5 rounded-2xl font-black shadow-lg shadow-red-600/20 uppercase tracking-tighter transition-transform active:scale-95">Pagar Agora</button>
+    </div>
+
+    <script>
+        // Configurações (Preencha com seus dados)
+        const MY_ZAP = "55SEUNUMERO"; // <--- SEU WHATSAPP AQUI
+        emailjs.init("surrco0WdnxPOKqWi");
+
+        const params = new URLSearchParams(window.location.search);
+        const nomeProd = params.get('n') || "Produto Vortex";
+        const precoProd = params.get('p') || "0.00";
+
+        document.getElementById('displayNome').innerText = nomeProd;
+        document.getElementById('displayPreco').innerText = "R$ " + precoProd;
+
+        function finalizarCompra() {
+            const email = document.getElementById('email').value;
+            if(!email.includes('@')) return alert("Insira um e-mail válido!");
+
+            const id = Math.random().toString(36).substr(2, 6).toUpperCase();
+            
+            // Envia EmailJS (configure Service ID e Template ID)
+            emailjs.send("service_id", "template_id", { buyer_email: email, product_name: nomeProd, order_id: id, price: precoProd });
+
+            // Envia para o WhatsApp (com o nome do produto)
+            const texto = `🔔 *PEDIDO VORTEX*\n📦 *PRODUTO:* ${nomeProd}\n💰 *VALOR:* R$ ${precoProd}\n🆔 *ID:* #${id}\n📧 *ENTREGA:* ${email}`;
+            window.location.href = `https://wa.me/${MY_ZAP}?text=${encodeURIComponent(texto)}`;
+        }
+    </script>
+</body>
+</html>
